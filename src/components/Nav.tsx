@@ -1,7 +1,11 @@
 import { Link, NavLink } from 'react-router-dom';
 import logo from '../assets/logo.png';
+import { useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
 
 const Nav = () => {
+
+    const { loginWithGoogle, loginWithFacebook, user, logout } = useContext(AuthContext);
     return (
         <div className="navbar bg-primary text-primary-content z-10 fixed w-full h-[10vh]">
             <div className="navbar-start">
@@ -38,9 +42,29 @@ const Nav = () => {
                     <li><a>Contáctenos</a></li>
                 </ul>
             </div>
-            <div className="navbar-end">
-                <button className="px-6 py-2 text-gray-100 rounded bg-gradient-to-r from-secondary to-gray-900">Entrar</button>
-            </div>
+
+            {user ?
+                <div className="navbar-end">
+                    <div className="w-12 h-12">
+                        <img className="w-full h-full rounded-full object-cover" src={user.avatar} />
+                    </div>
+                    <span>{user.name}</span>
+                    <button className="ms-5 px-6 py-2 text-gray-100 rounded bg-gradient-to-r from-secondary to-gray-900" onClick={logout}>Salir</button>
+
+                </div> :
+
+                <>
+                    <div className="navbar-end">
+                        <button className="px-6 py-2 text-gray-100 rounded bg-gradient-to-r from-secondary to-gray-900" onClick={loginWithGoogle}>Login con Google</button>
+                    </div>
+                    <div className="navbar-end">
+                        <button className="px-6 py-2 text-gray-100 rounded bg-gradient-to-r from-secondary to-gray-900" onClick={loginWithFacebook}>Login con Facebook</button>
+                    </div>
+                    <div className="navbar-end">
+                        <button className="px-6 py-2 text-gray-100 rounded bg-gradient-to-r from-secondary to-gray-900">Entrar</button>
+                    </div>
+                </>
+            }
         </div>
     )
 }
